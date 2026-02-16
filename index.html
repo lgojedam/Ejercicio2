@@ -1,18 +1,308 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="es">
 
 <head>
-    <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <script src="javascript.js"></script>
-    <title>Document</title>
+  <meta charset="UTF-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>LunaraOM | Tienda de Minerales</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@600;700&family=Montserrat:wght@400;500;700&display=swap" rel="stylesheet" />
+  <style>
+    :root {
+      --black-header: #0b0b0b;
+      --bg-page: #f4f3f0;
+      --card-bg: #ffffff;
+      --gold-accent: #c5a47e;
+      --text-dark: #232323;
+      --text-gray: #4b4b4b;
+      --amethyst-purple: #5c3c92;
+      --success: #2f8f5b;
+      --danger: #c0392b;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      background: var(--bg-page);
+      color: var(--text-gray);
+      font-family: "Montserrat", sans-serif;
+      min-height: 100vh;
+    }
+
+    header {
+      background: var(--black-header);
+      border-bottom: 2px solid var(--gold-accent);
+      color: #fff;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 14px 5%;
+      position: sticky;
+      top: 0;
+      z-index: 10;
+    }
+
+    .brand {
+      color: var(--gold-accent);
+      font-family: "Cinzel", serif;
+      font-size: 1.15rem;
+      letter-spacing: 1.5px;
+    }
+
+    .cart-summary {
+      background: #ffffff12;
+      border: 1px solid #ffffff25;
+      border-radius: 999px;
+      cursor: pointer;
+      font-size: 0.92rem;
+      padding: 8px 14px;
+    }
+
+    main {
+      margin: 30px auto;
+      max-width: 1180px;
+      padding: 0 5%;
+    }
+
+    .hero {
+      margin-bottom: 24px;
+    }
+
+    .hero h1 {
+      color: var(--text-dark);
+      font-family: "Cinzel", serif;
+      font-size: clamp(1.5rem, 2.2vw, 2.2rem);
+      margin-bottom: 8px;
+    }
+
+    .controls {
+      display: grid;
+      gap: 12px;
+      grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+      margin-bottom: 24px;
+    }
+
+    input,
+    select,
+    button {
+      border: 1px solid #ddd;
+      border-radius: 10px;
+      font: inherit;
+      padding: 10px 12px;
+    }
+
+    button {
+      background: var(--amethyst-purple);
+      border: none;
+      color: #fff;
+      cursor: pointer;
+      font-weight: 600;
+    }
+
+    button:hover {
+      filter: brightness(1.1);
+    }
+
+    .products-grid {
+      display: grid;
+      gap: 16px;
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    }
+
+    .product-card {
+      background: var(--card-bg);
+      border: 1px solid #e2e2e2;
+      border-radius: 14px;
+      box-shadow: 0 3px 12px #00000009;
+      display: grid;
+      padding: 14px;
+    }
+
+    .product-card h3 {
+      color: var(--text-dark);
+      font-size: 1.05rem;
+      margin-bottom: 6px;
+    }
+
+    .tag {
+      background: #f0ebff;
+      border-radius: 999px;
+      color: var(--amethyst-purple);
+      display: inline-block;
+      font-size: 0.76rem;
+      margin-bottom: 8px;
+      padding: 4px 9px;
+      width: fit-content;
+    }
+
+    .price {
+      color: var(--text-dark);
+      font-size: 1.1rem;
+      font-weight: 700;
+      margin: 8px 0 14px;
+    }
+
+    .cart-panel {
+      background: #ffffff;
+      border-left: 2px solid #ececec;
+      box-shadow: -5px 0 20px #0000001f;
+      display: grid;
+      gap: 12px;
+      height: 100%;
+      max-width: 360px;
+      padding: 22px 18px;
+      position: fixed;
+      right: 0;
+      top: 0;
+      transform: translateX(102%);
+      transition: transform 0.3s ease;
+      width: 100%;
+      z-index: 20;
+    }
+
+    .cart-panel.active {
+      transform: translateX(0);
+    }
+
+    .cart-title {
+      color: var(--text-dark);
+      font-family: "Cinzel", serif;
+      margin-bottom: 6px;
+    }
+
+    .cart-list {
+      display: grid;
+      gap: 10px;
+      max-height: 54vh;
+      overflow-y: auto;
+    }
+
+    .cart-item {
+      border: 1px solid #ececec;
+      border-radius: 10px;
+      display: grid;
+      gap: 6px;
+      padding: 10px;
+    }
+
+    .cart-item-head {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .quantity-control {
+      align-items: center;
+      display: flex;
+      gap: 8px;
+    }
+
+    .quantity-control button {
+      border-radius: 8px;
+      min-width: 28px;
+      padding: 4px 8px;
+    }
+
+    .remove-btn {
+      background: transparent;
+      color: var(--danger);
+      font-size: 0.85rem;
+      padding: 0;
+      text-decoration: underline;
+    }
+
+    .cart-empty {
+      color: #6f6f6f;
+      font-style: italic;
+      padding: 8px 0;
+    }
+
+    .cart-footer {
+      border-top: 1px solid #ececec;
+      padding-top: 12px;
+    }
+
+    .toast {
+      background: #111;
+      border-radius: 999px;
+      bottom: 16px;
+      color: #fff;
+      left: 50%;
+      opacity: 0;
+      padding: 9px 14px;
+      position: fixed;
+      transform: translate(-50%, 20px);
+      transition: all 0.3s ease;
+      z-index: 30;
+    }
+
+    .toast.show {
+      opacity: 1;
+      transform: translate(-50%, 0);
+    }
+
+    .clear-btn {
+      background: var(--danger);
+      width: 100%;
+    }
+
+    .close-panel {
+      background: transparent;
+      color: var(--text-dark);
+      justify-self: end;
+      padding: 0;
+    }
+  </style>
 </head>
 
 <body>
-    <h1>Hoal Pepe</h1>
+  <header>
+    <div class="brand">LunaraOM · E-commerce Mineral</div>
+    <button id="openCartBtn" class="cart-summary" type="button">🛒 0 items · $0</button>
+  </header>
 
+  <main>
+    <section class="hero">
+      <h1>El Sendero Mineral</h1>
+      <p>Explora piedras energéticas y agrega tus favoritas al carrito.</p>
+    </section>
 
+    <section class="controls">
+      <input type="search" id="searchInput" placeholder="Buscar mineral por nombre..." />
+      <select id="categoryFilter" aria-label="Filtrar por categoría">
+        <option value="all">Todas las categorías</option>
+      </select>
+      <select id="sortSelect" aria-label="Ordenar productos">
+        <option value="default">Orden por defecto</option>
+        <option value="price-asc">Precio: menor a mayor</option>
+        <option value="price-desc">Precio: mayor a menor</option>
+        <option value="name-asc">Nombre: A-Z</option>
+      </select>
+    </section>
+
+    <section class="products-grid" id="productsGrid"></section>
+  </main>
+
+  <aside id="cartPanel" class="cart-panel" aria-label="Carrito de compras">
+    <button id="closeCartBtn" class="close-panel" type="button">✕ Cerrar</button>
+    <h2 class="cart-title">Tu carrito</h2>
+    <div id="cartList" class="cart-list"></div>
+    <div id="cartFooter" class="cart-footer">
+      <p><strong>Total:</strong> $<span id="cartTotal">0</span></p>
+      <button id="clearCartBtn" class="clear-btn" type="button">Vaciar carrito</button>
+    </div>
+  </aside>
+
+  <div id="toast" class="toast" role="status" aria-live="polite"></div>
+
+  <script src="javascript.js" defer></script>
 </body>
 
 </html>
